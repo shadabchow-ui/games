@@ -1,5 +1,9 @@
 import { DirectoryGrid } from "components/directory/directory-grid";
-import { getGenres, isIgdbConfigError, isIgdbUpstreamError } from "lib/igdb/client";
+import {
+  getGenres,
+  isIgdbConfigError,
+  isIgdbUpstreamError,
+} from "lib/igdb/client";
 
 export const metadata = {
   title: "Genres",
@@ -17,7 +21,7 @@ export default async function GenresPage() {
         <header className="space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">Genres</h1>
           <p className="text-sm text-neutral-600 dark:text-neutral-300">
-            Explore game genres and jump into curated game listings for each one.
+            Start with core genres, then dig into broader IGDB genre browsing.
           </p>
         </header>
         <DirectoryGrid

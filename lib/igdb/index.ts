@@ -25,8 +25,12 @@ export {
   sanitizeFranchiseSlug,
   sanitizeLimit,
   sanitizeSortMode,
-  type FranchiseGame,
-  type GameSortMode,
 } from "./client";
 
-export type { DirectoryItem, GameCardData, IgdbGame } from "./types";
+export type {
+  DirectoryItem,
+  FranchiseGame,
+  GameCardData,
+  GameSortMode,
+  IgdbGame,
+} from "./types";

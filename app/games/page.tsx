@@ -27,8 +27,10 @@ export default async function GamesPage(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
-  const rawSort = typeof searchParams?.sort === "string" ? searchParams.sort : undefined;
-  const rawLimit = typeof searchParams?.limit === "string" ? searchParams.limit : undefined;
+  const rawSort =
+    typeof searchParams?.sort === "string" ? searchParams.sort : undefined;
+  const rawLimit =
+    typeof searchParams?.limit === "string" ? searchParams.limit : undefined;
 
   const sort = sanitizeSortMode(rawSort);
   const limit = sanitizeLimit(rawLimit);
@@ -51,7 +53,9 @@ export default async function GamesPage(props: {
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-8 lg:px-8">
       <header className="mb-6 space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">Games Directory</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">
+          Games Directory
+        </h1>
         <p className="text-sm text-neutral-600 dark:text-neutral-300">
           Server-rendered listings from IGDB with safe sort query parameters.
         </p>
@@ -103,7 +107,19 @@ export default async function GamesPage(props: {
         </div>
       ) : games.length === 0 ? (
         <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-6 text-sm text-neutral-600 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300">
-          No games found for this sort mode.
+          No games matched this sort. Try{" "}
+          <Link className="underline" href="/games?sort=top-rated">
+            Top rated
+          </Link>
+          ,{" "}
+          <Link className="underline" href="/games?sort=newest">
+            Newest
+          </Link>
+          , or{" "}
+          <Link className="underline" href="/games?sort=upcoming">
+            Upcoming
+          </Link>
+          .
         </div>
       ) : (
         <>
@@ -112,7 +128,8 @@ export default async function GamesPage(props: {
             games={games}
           />
           <div className="mt-6 text-center text-sm text-neutral-500 dark:text-neutral-400">
-            Showing up to {limit} games. Load-more pagination is reserved for a follow-up job.
+            Showing up to {limit} games. Load-more pagination is reserved for a
+            follow-up job.
           </div>
         </>
       )}

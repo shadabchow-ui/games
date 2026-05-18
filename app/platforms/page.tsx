@@ -21,7 +21,8 @@ export default async function PlatformsPage() {
         <header className="space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">Platforms</h1>
           <p className="text-sm text-neutral-600 dark:text-neutral-300">
-            Explore game platforms and browse games available on each platform.
+            Browse useful gaming platforms first, then explore the broader IGDB
+            platform catalog.
           </p>
         </header>
         <DirectoryGrid

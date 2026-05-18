@@ -19,7 +19,11 @@ type CompareSearchParams = {
 };
 
 function getSingleValue(value: string | string[] | undefined) {
-  return typeof value === "string" ? value : Array.isArray(value) ? value[0] ?? "" : "";
+  return typeof value === "string"
+    ? value
+    : Array.isArray(value)
+      ? (value[0] ?? "")
+      : "";
 }
 
 function normalizeCompareQuery(value: string | string[] | undefined) {
@@ -30,7 +34,9 @@ function ErrorState({ message }: { message: string }) {
   return (
     <section className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
       <h1 className="text-3xl font-semibold tracking-tight">Compare games</h1>
-      <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{message}</p>
+      <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
+        {message}
+      </p>
     </section>
   );
 }
@@ -40,26 +46,31 @@ export default async function ComparePage(props: {
 }) {
   const searchParams = await props.searchParams;
   const leftQuery =
-    normalizeCompareQuery(searchParams?.a) || normalizeCompareQuery(searchParams?.gameA);
+    normalizeCompareQuery(searchParams?.a) ||
+    normalizeCompareQuery(searchParams?.gameA);
   const rightQuery =
-    normalizeCompareQuery(searchParams?.b) || normalizeCompareQuery(searchParams?.gameB);
+    normalizeCompareQuery(searchParams?.b) ||
+    normalizeCompareQuery(searchParams?.gameB);
 
   try {
     const [leftGame, rightGame] =
       leftQuery && rightQuery
-        ? await Promise.all([
-            resolveGameReference(leftQuery),
-            resolveGameReference(rightQuery),
-          ])
+        ? [
+            await resolveGameReference(leftQuery),
+            await resolveGameReference(rightQuery),
+          ]
         : [null, null];
 
     return (
       <section className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
         <header className="mb-6 space-y-3">
-          <h1 className="text-3xl font-semibold tracking-tight">Compare games</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            Compare games
+          </h1>
           <p className="max-w-3xl text-sm text-neutral-600 dark:text-neutral-300">
-            Compare two games with release timing, ratings, platforms, genres, themes,
-            game modes, companies, and summary excerpts pulled from IGDB.
+            Compare two games with release timing, ratings, platforms, genres,
+            themes, game modes, companies, and summary excerpts pulled from
+            IGDB.
           </p>
         </header>
 
@@ -105,7 +116,8 @@ export default async function ComparePage(props: {
 
         {!leftQuery || !rightQuery ? (
           <div className="rounded-xl border border-dashed border-neutral-300 p-6 text-sm text-neutral-700 dark:border-neutral-700 dark:text-neutral-300">
-            Enter two game titles, slugs, or IGDB ids to compare them side by side.
+            Enter two game titles, slugs, or IGDB ids to compare them side by
+            side.
           </div>
         ) : !leftGame || !rightGame ? (
           <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-6 text-sm text-neutral-700 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300">
@@ -120,11 +132,15 @@ export default async function ComparePage(props: {
     );
   } catch (error) {
     if (isIgdbConfigError(error)) {
-      return <ErrorState message="IGDB credentials are not configured on the server." />;
+      return (
+        <ErrorState message="IGDB credentials are not configured on the server." />
+      );
     }
 
     if (isIgdbUpstreamError(error)) {
-      return <ErrorState message="IGDB is temporarily unavailable for comparisons." />;
+      return (
+        <ErrorState message="IGDB is temporarily unavailable for comparisons." />
+      );
     }
 
     throw error;

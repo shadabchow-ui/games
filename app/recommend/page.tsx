@@ -12,7 +12,8 @@ import { mapIgdbGameToCard } from "lib/igdb/mappers";
 
 export const metadata = {
   title: "Recommend",
-  description: "Find what to play next with transparent metadata-based recommendations.",
+  description:
+    "Find what to play next with transparent metadata-based recommendations.",
 };
 
 type RecommendSearchParams = {
@@ -25,7 +26,11 @@ type RecommendSearchParams = {
 };
 
 function getSingleValue(value: string | string[] | undefined) {
-  return typeof value === "string" ? value : Array.isArray(value) ? value[0] ?? "" : "";
+  return typeof value === "string"
+    ? value
+    : Array.isArray(value)
+      ? (value[0] ?? "")
+      : "";
 }
 
 function sanitizeLikeQuery(value: string | string[] | undefined) {
@@ -54,8 +59,12 @@ function sanitizeRelease(value: string | string[] | undefined) {
 function ErrorState({ message }: { message: string }) {
   return (
     <section className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
-      <h1 className="text-3xl font-semibold tracking-tight">Find what to play next</h1>
-      <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{message}</p>
+      <h1 className="text-3xl font-semibold tracking-tight">
+        Find what to play next
+      </h1>
+      <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
+        {message}
+      </p>
     </section>
   );
 }
@@ -66,10 +75,14 @@ export default async function RecommendPage(props: {
   const searchParams = await props.searchParams;
 
   try {
-    const [genres, platforms] = await Promise.all([getGenres(), getPlatforms()]);
+    const [genres, platforms] = await Promise.all([
+      getGenres(),
+      getPlatforms(),
+    ]);
     const selectedGenreSlug = getSingleValue(searchParams?.genre);
     const selectedPlatformSlug = getSingleValue(searchParams?.platform);
-    const selectedGenre = genres.find((item) => item.slug === selectedGenreSlug) ?? null;
+    const selectedGenre =
+      genres.find((item) => item.slug === selectedGenreSlug) ?? null;
     const selectedPlatform =
       platforms.find((item) => item.slug === selectedPlatformSlug) ?? null;
     const mode = sanitizeMode(searchParams?.mode);
@@ -88,17 +101,23 @@ export default async function RecommendPage(props: {
 
     const cards = result.games.map(mapIgdbGameToCard);
     const hasActiveFilters = Boolean(
-      selectedGenre || selectedPlatform || likeQuery || mode !== "any" || release !== "any",
+      selectedGenre ||
+        selectedPlatform ||
+        likeQuery ||
+        mode !== "any" ||
+        release !== "any",
     );
 
     return (
       <section className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
         <header className="mb-6 space-y-3">
-          <h1 className="text-3xl font-semibold tracking-tight">Find what to play next</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            Find what to play next
+          </h1>
           <p className="max-w-3xl text-sm text-neutral-600 dark:text-neutral-300">
-            Filter recommendations by platform, genre, release window, and play style.
-            Recommendations are based on IGDB metadata and transparent rule-based matching
-            for now.
+            Filter recommendations by platform, genre, release window, and play
+            style. Recommendations are based on IGDB metadata and transparent
+            rule-based matching for now.
           </p>
         </header>
 
@@ -227,8 +246,8 @@ export default async function RecommendPage(props: {
 
         {!hasIgdbCredentials() ? (
           <div className="mb-6 rounded-xl border border-dashed border-neutral-300 p-6 text-sm text-neutral-700 dark:border-neutral-700 dark:text-neutral-300">
-            Add `TWITCH_CLIENT_ID` plus `TWITCH_ACCESS_TOKEN` or `TWITCH_CLIENT_SECRET`
-            on the server to load live recommendations.
+            Add `TWITCH_CLIENT_ID` plus `TWITCH_ACCESS_TOKEN` or
+            `TWITCH_CLIENT_SECRET` on the server to load live recommendations.
           </div>
         ) : null}
 
@@ -237,7 +256,12 @@ export default async function RecommendPage(props: {
             emptyMessage="No recommendations matched this combination yet. Try a broader platform, genre, or lower rating threshold."
             games={cards}
           />
-        ) : null}
+        ) : (
+          <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-6 text-sm text-neutral-700 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300">
+            Recommendation defaults will appear here once live IGDB data is
+            available.
+          </div>
+        )}
       </section>
     );
   } catch (error) {
@@ -248,7 +272,9 @@ export default async function RecommendPage(props: {
     }
 
     if (isIgdbUpstreamError(error)) {
-      return <ErrorState message="IGDB is temporarily unavailable for recommendations." />;
+      return (
+        <ErrorState message="IGDB is temporarily unavailable for recommendations." />
+      );
     }
 
     throw error;

@@ -1,7 +1,13 @@
 import Link from "next/link";
 import LogoSquare from "components/logo-square";
 
-const footerLinks = ["Games", "Platforms", "Genres", "Companies", "Franchises"];
+const footerLinks = [
+  { label: "Games", href: "/games" },
+  { label: "Platforms", href: "/platforms" },
+  { label: "Genres", href: "/genres" },
+  { label: "Companies", href: "/companies" },
+  { label: "Franchises", href: "/franchises" },
+];
 
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
@@ -23,12 +29,12 @@ export default async function Footer() {
         <nav>
           <ul>
             {footerLinks.map((item) => (
-              <li key={item}>
+              <li key={item.label}>
                 <Link
-                  href="/"
+                  href={item.href}
                   className="block p-2 text-lg underline-offset-4 hover:text-black hover:underline md:inline-block md:text-sm dark:hover:text-neutral-300"
                 >
-                  {item}
+                  {item.label}
                 </Link>
               </li>
             ))}
@@ -50,9 +56,7 @@ export default async function Footer() {
             All rights reserved.
           </p>
           <hr className="mx-4 hidden h-4 w-[1px] border-l border-neutral-400 md:inline-block" />
-          <p className="md:ml-auto">
-            Curated video game directory shell
-          </p>
+          <p className="md:ml-auto">Curated video game directory shell</p>
         </div>
       </div>
     </footer>

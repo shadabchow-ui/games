@@ -13,9 +13,9 @@ export function DirectoryTileGrid({
       {items.map((item) => (
         <li key={item.id}>
           <Link
-            href="#"
-            aria-disabled
+            href={`/${kind}/${item.slug}`}
             className="block rounded-lg border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-700 transition hover:border-neutral-400 hover:text-black dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-300 dark:hover:border-neutral-600 dark:hover:text-white"
+            prefetch={false}
           >
             <span className="font-medium">{item.name}</span>
             <span className="ml-2 text-xs uppercase text-neutral-500 dark:text-neutral-400">

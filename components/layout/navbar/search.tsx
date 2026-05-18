@@ -3,8 +3,9 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Form from "next/form";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function Search() {
+function SearchForm() {
   const searchParams = useSearchParams();
 
   return (
@@ -25,6 +26,14 @@ export default function Search() {
         <MagnifyingGlassIcon className="h-4" />
       </div>
     </Form>
+  );
+}
+
+export default function Search() {
+  return (
+    <Suspense fallback={<SearchSkeleton />}>
+      <SearchForm />
+    </Suspense>
   );
 }
 
