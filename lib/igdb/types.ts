@@ -154,3 +154,12 @@ export type CachedTwitchToken = {
   accessToken: string;
   expiresAt: number;
 };
+
+export type GameLookupStatus = "found" | "not_found" | "upstream_error";
+
+export type GameLookupResult = {
+  query: string;
+  status: GameLookupStatus;
+  game: IgdbGame | null;
+  message?: string;
+};

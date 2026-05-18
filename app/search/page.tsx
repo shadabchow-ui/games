@@ -36,7 +36,8 @@ export default async function SearchPage(props: {
     if (games.length === 0) {
       return (
         <section className="rounded-xl border border-neutral-200 bg-neutral-50 p-6 text-sm text-neutral-700 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300">
-          No games found for <span className="font-semibold">"{searchValue}"</span>.
+          No games found for{" "}
+          <span className="font-semibold">"{searchValue}"</span>.
         </section>
       );
     }

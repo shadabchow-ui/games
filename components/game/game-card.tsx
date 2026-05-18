@@ -16,7 +16,11 @@ export function GameCard({
   const content = (
     <article className="group overflow-hidden rounded-lg border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-black">
       <div className="relative aspect-[3/4] w-full overflow-hidden">
-        <GameCover imageId={game.coverImageId} priority={priority} title={title} />
+        <GameCover
+          imageId={game.coverImageId}
+          priority={priority}
+          title={title}
+        />
       </div>
       <div className="p-3">
         <GameMeta

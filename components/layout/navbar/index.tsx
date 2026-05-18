@@ -1,4 +1,4 @@
-import LogoSquare from "components/logo-square";
+import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import MobileMenu from "./mobile-menu";
@@ -16,7 +16,7 @@ const navItems = [
 
 export async function Navbar() {
   return (
-    <nav className="relative border-b border-neutral-200/80 bg-neutral-50/90 px-4 py-4 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/85 lg:px-6">
+    <nav className="relative border-b border-neutral-800 bg-black/90 px-4 py-4 backdrop-blur lg:px-6">
       <div className="block flex-none md:hidden">
         <Suspense fallback={null}>
           <MobileMenu menu={navItems} />
@@ -27,12 +27,17 @@ export async function Navbar() {
           <Link
             href="/"
             prefetch={true}
+            aria-label="Upcube Games home"
             className="mr-6 flex shrink-0 items-center"
           >
-            <LogoSquare />
-            <div className="ml-3 flex-none text-sm font-medium uppercase tracking-[0.18em] md:hidden lg:block">
-              Upcube Games
-            </div>
+            <Image
+              src="/brand/logo-mark.png"
+              alt="Upcube Games logo"
+              width={40}
+              height={40}
+              className="h-10 w-10"
+              priority
+            />
           </Link>
           {navItems.length ? (
             <ul className="hidden flex-wrap gap-5 text-sm md:flex md:items-center">
@@ -49,11 +54,6 @@ export async function Navbar() {
               ))}
             </ul>
           ) : null}
-        </div>
-        <div className="hidden justify-end md:flex md:flex-1">
-          <span className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-            Video game directory
-          </span>
         </div>
       </div>
     </nav>

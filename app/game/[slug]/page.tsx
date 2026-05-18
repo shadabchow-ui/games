@@ -1,5 +1,9 @@
 import { GameCard, GameCover } from "components/game";
-import { getGameBySlug, isIgdbConfigError, isIgdbUpstreamError } from "lib/igdb/client";
+import {
+  getGameBySlug,
+  isIgdbConfigError,
+  isIgdbUpstreamError,
+} from "lib/igdb/client";
 import { buildIgdbImageUrl } from "lib/igdb/images";
 import type {
   GameCardData,
@@ -38,7 +42,10 @@ function toCompanies(
   role?: "developer" | "publisher",
 ) {
   const names = (involvedCompanies ?? [])
-    .filter((company) => company?.company?.name && (role ? Boolean(company[role]) : true))
+    .filter(
+      (company) =>
+        company?.company?.name && (role ? Boolean(company[role]) : true),
+    )
     .map((company) => company?.company?.name?.trim())
     .filter((value): value is string => Boolean(value));
 
@@ -51,7 +58,10 @@ function toLinks(
 ) {
   return [...(links ?? []), ...(externalLinks ?? [])]
     .map((entry) => entry?.url?.trim())
-    .filter((url): url is string => typeof url === "string" && /^https?:\/\//.test(url))
+    .filter(
+      (url): url is string =>
+        typeof url === "string" && /^https?:\/\//.test(url),
+    )
     .filter((url, index, array) => array.indexOf(url) === index)
     .slice(0, 8);
 }
@@ -166,13 +176,17 @@ export default async function GamePage(props: {
               <p className="text-sm uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
                 IGDB game
               </p>
-              <h1 className="text-4xl font-semibold tracking-tight">{game.name}</h1>
+              <h1 className="text-4xl font-semibold tracking-tight">
+                {game.name}
+              </h1>
             </div>
 
             <div className="space-y-3">
               <div className="flex flex-wrap gap-2 text-sm text-neutral-600 dark:text-neutral-300">
                 {releaseDate ? <span>Released {releaseDate}</span> : null}
-                {!releaseDate && releaseYear ? <span>{releaseYear}</span> : null}
+                {!releaseDate && releaseYear ? (
+                  <span>{releaseYear}</span>
+                ) : null}
                 {typeof game.total_rating === "number" ? (
                   <span>
                     Rating {Math.round(game.total_rating * 10) / 10}
@@ -215,7 +229,9 @@ export default async function GamePage(props: {
 
             {game.storyline ? (
               <div className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-black">
-                <h2 className="mb-2 text-lg font-semibold tracking-tight">Storyline</h2>
+                <h2 className="mb-2 text-lg font-semibold tracking-tight">
+                  Storyline
+                </h2>
                 <p className="text-sm leading-7 text-neutral-700 dark:text-neutral-300">
                   {game.storyline}
                 </p>
@@ -251,7 +267,9 @@ export default async function GamePage(props: {
 
         {screenshots.length ? (
           <section className="mt-10">
-            <h2 className="mb-4 text-2xl font-semibold tracking-tight">Screenshots</h2>
+            <h2 className="mb-4 text-2xl font-semibold tracking-tight">
+              Screenshots
+            </h2>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {screenshots.map((imageId, index) => (
                 <div
@@ -273,7 +291,9 @@ export default async function GamePage(props: {
 
         {videos.length ? (
           <section className="mt-10">
-            <h2 className="mb-4 text-2xl font-semibold tracking-tight">Videos</h2>
+            <h2 className="mb-4 text-2xl font-semibold tracking-tight">
+              Videos
+            </h2>
             <div className="grid gap-4 lg:grid-cols-2">
               {videos.map((video) => (
                 <article
@@ -300,7 +320,9 @@ export default async function GamePage(props: {
 
         {externalLinks.length ? (
           <section className="mt-10">
-            <h2 className="mb-4 text-2xl font-semibold tracking-tight">External Links</h2>
+            <h2 className="mb-4 text-2xl font-semibold tracking-tight">
+              External Links
+            </h2>
             <div className="flex flex-wrap gap-3">
               {externalLinks.map((url) => (
                 <Link
@@ -319,7 +341,9 @@ export default async function GamePage(props: {
 
         {similarGames.length ? (
           <section className="mt-10">
-            <h2 className="mb-4 text-2xl font-semibold tracking-tight">Similar Games</h2>
+            <h2 className="mb-4 text-2xl font-semibold tracking-tight">
+              Similar Games
+            </h2>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {similarGames.map((similarGame) => (
                 <GameCard game={similarGame} key={similarGame.id} />

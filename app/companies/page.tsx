@@ -23,14 +23,16 @@ export default async function CompaniesPage() {
   try {
     const companies = await getFeaturedCompanies();
 
-    const companyCards: CompanyCardData[] = companies.map((company: IgdbCompany) => ({
-      id: company.id,
-      name: company.name,
-      slug: company.slug,
-      logoImageId: company.logo?.image_id ?? null,
-      description: company.description,
-      foundedYear: toYear(company.start_date),
-    }));
+    const companyCards: CompanyCardData[] = companies.map(
+      (company: IgdbCompany) => ({
+        id: company.id,
+        name: company.name,
+        slug: company.slug,
+        logoImageId: company.logo?.image_id ?? null,
+        description: company.description,
+        foundedYear: toYear(company.start_date),
+      }),
+    );
 
     return (
       <section className="mx-auto max-w-(--breakpoint-2xl) px-4 pb-10 pt-4">

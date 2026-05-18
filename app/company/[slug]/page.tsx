@@ -24,7 +24,8 @@ export async function generateMetadata(props: {
     if (!company) return { title: "Company not found" };
     return {
       title: company.name,
-      description: company.description || `Company profile for ${company.name}.`,
+      description:
+        company.description || `Company profile for ${company.name}.`,
     };
   } catch {
     return { title: "Company" };
@@ -59,7 +60,9 @@ export default async function CompanyDetailPage(props: {
     const publishedGames = publishedGamesRaw.map(mapIgdbGameToCard);
     const foundedYear = toYear(company.start_date);
     const logoImageId = company.logo?.image_id ?? null;
-    const logoUrl = logoImageId ? buildIgdbImageUrl(logoImageId, "cover_big") : null;
+    const logoUrl = logoImageId
+      ? buildIgdbImageUrl(logoImageId, "cover_big")
+      : null;
     const websiteLinks = (company.websites || [])
       .map((website) => normalizeWebsiteUrl(website.url))
       .filter((url): url is string => Boolean(url));
@@ -84,14 +87,22 @@ export default async function CompanyDetailPage(props: {
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-3xl font-semibold tracking-tight">{company.name}</h1>
+            <h1 className="text-3xl font-semibold tracking-tight">
+              {company.name}
+            </h1>
             {foundedYear ? (
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">Founded {foundedYear}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                Founded {foundedYear}
+              </p>
             ) : null}
             {company.description ? (
-              <p className="text-sm text-neutral-700 dark:text-neutral-300">{company.description}</p>
+              <p className="text-sm text-neutral-700 dark:text-neutral-300">
+                {company.description}
+              </p>
             ) : (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">Description not available.</p>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                Description not available.
+              </p>
             )}
             {websiteLinks.length ? (
               <div className="flex flex-wrap gap-2 pt-1">
@@ -112,7 +123,9 @@ export default async function CompanyDetailPage(props: {
         </header>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-semibold tracking-tight">Developed games</h2>
+          <h2 className="text-xl font-semibold tracking-tight">
+            Developed games
+          </h2>
           <GameGrid
             emptyMessage="No developed games are available for this company."
             games={developedGames}
@@ -120,7 +133,9 @@ export default async function CompanyDetailPage(props: {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-semibold tracking-tight">Published games</h2>
+          <h2 className="text-xl font-semibold tracking-tight">
+            Published games
+          </h2>
           <GameGrid
             emptyMessage="No published games are available for this company."
             games={publishedGames}
@@ -132,7 +147,9 @@ export default async function CompanyDetailPage(props: {
     if (isIgdbConfigError(error) || isIgdbUpstreamError(error)) {
       return (
         <section className="mx-auto max-w-(--breakpoint-2xl) px-4 pb-10 pt-4">
-          <h1 className="text-2xl font-semibold tracking-tight">Company unavailable</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Company unavailable
+          </h1>
           <p className="pt-2 text-sm text-neutral-600 dark:text-neutral-300">
             Company data is temporarily unavailable.
           </p>

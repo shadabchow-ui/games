@@ -109,7 +109,9 @@ export default async function FranchiseDetailPage(props: {
   return (
     <section className="mx-auto w-full max-w-7xl px-4 py-8 lg:px-8">
       <header className="mb-6 space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">{franchise.name}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">
+          {franchise.name}
+        </h1>
         <p className="text-sm text-neutral-600 dark:text-neutral-300">
           Franchise games, top-rated titles, and release timeline from IGDB.
         </p>

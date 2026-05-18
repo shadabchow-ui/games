@@ -42,7 +42,9 @@ function excerpt(summary: string | null) {
     return "Summary not available.";
   }
 
-  return summary.length > 220 ? `${summary.slice(0, 217).trimEnd()}...` : summary;
+  return summary.length > 220
+    ? `${summary.slice(0, 217).trimEnd()}...`
+    : summary;
 }
 
 function getCompanyNames(game: IgdbGame) {
@@ -66,7 +68,9 @@ function Cell({
         {title}
       </dt>
       <dd className="text-sm text-neutral-800 dark:text-neutral-100">{left}</dd>
-      <dd className="text-sm text-neutral-800 dark:text-neutral-100">{right}</dd>
+      <dd className="text-sm text-neutral-800 dark:text-neutral-100">
+        {right}
+      </dd>
     </div>
   );
 }
@@ -94,7 +98,9 @@ export function GameCompareTable({
       <div className="mb-5 grid gap-4 md:grid-cols-[180px,1fr,1fr]">
         <div />
         <div className="space-y-2">
-          <h2 className="text-xl font-semibold tracking-tight">{leftGame.name}</h2>
+          <h2 className="text-xl font-semibold tracking-tight">
+            {leftGame.name}
+          </h2>
           {leftGame.slug ? (
             <Link
               className="text-sm text-blue-700 underline-offset-4 hover:underline dark:text-blue-300"
@@ -105,7 +111,9 @@ export function GameCompareTable({
           ) : null}
         </div>
         <div className="space-y-2">
-          <h2 className="text-xl font-semibold tracking-tight">{rightGame.name}</h2>
+          <h2 className="text-xl font-semibold tracking-tight">
+            {rightGame.name}
+          </h2>
           {rightGame.slug ? (
             <Link
               className="text-sm text-blue-700 underline-offset-4 hover:underline dark:text-blue-300"
@@ -118,19 +126,51 @@ export function GameCompareTable({
       </div>
 
       <dl>
-        <Cell title="Release date" left={formatDate(leftGame.first_release_date)} right={formatDate(rightGame.first_release_date)} />
-        <Cell title="Rating" left={formatRating(leftGame.total_rating)} right={formatRating(rightGame.total_rating)} />
+        <Cell
+          title="Release date"
+          left={formatDate(leftGame.first_release_date)}
+          right={formatDate(rightGame.first_release_date)}
+        />
+        <Cell
+          title="Rating"
+          left={formatRating(leftGame.total_rating)}
+          right={formatRating(rightGame.total_rating)}
+        />
         <Cell
           title="Rating count"
           left={formatCount(leftGame.total_rating_count)}
           right={formatCount(rightGame.total_rating_count)}
         />
-        <Cell title="Platforms" left={formatList(leftPlatforms)} right={formatList(rightPlatforms)} />
-        <Cell title="Genres" left={formatList(leftGenres)} right={formatList(rightGenres)} />
-        <Cell title="Themes" left={formatList(leftThemes)} right={formatList(rightThemes)} />
-        <Cell title="Game modes" left={formatList(leftModes)} right={formatList(rightModes)} />
-        <Cell title="Companies" left={formatList(leftCompanies)} right={formatList(rightCompanies)} />
-        <Cell title="Summary" left={excerpt(leftGame.summary)} right={excerpt(rightGame.summary)} />
+        <Cell
+          title="Platforms"
+          left={formatList(leftPlatforms)}
+          right={formatList(rightPlatforms)}
+        />
+        <Cell
+          title="Genres"
+          left={formatList(leftGenres)}
+          right={formatList(rightGenres)}
+        />
+        <Cell
+          title="Themes"
+          left={formatList(leftThemes)}
+          right={formatList(rightThemes)}
+        />
+        <Cell
+          title="Game modes"
+          left={formatList(leftModes)}
+          right={formatList(rightModes)}
+        />
+        <Cell
+          title="Companies"
+          left={formatList(leftCompanies)}
+          right={formatList(rightCompanies)}
+        />
+        <Cell
+          title="Summary"
+          left={excerpt(leftGame.summary)}
+          right={excerpt(rightGame.summary)}
+        />
       </dl>
     </section>
   );

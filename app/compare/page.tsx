@@ -1,9 +1,6 @@
 import { GameCompareTable } from "components/compare/game-compare-table";
-import {
-  isIgdbConfigError,
-  isIgdbUpstreamError,
-  resolveGameReference,
-} from "lib/igdb/client";
+import { isIgdbConfigError, resolveGameReferenceResult } from "lib/igdb/client";
+import type { GameLookupResult } from "lib/igdb/types";
 import Link from "next/link";
 
 export const metadata = {
@@ -41,6 +38,41 @@ function ErrorState({ message }: { message: string }) {
   );
 }
 
+function LookupStateCard({
+  title,
+  result,
+}: {
+  title: string;
+  result: GameLookupResult;
+}) {
+  return (
+    <article className="rounded-xl border border-neutral-200 bg-neutral-50 p-5 dark:border-neutral-800 dark:bg-neutral-900">
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">
+        {title}
+      </p>
+      {result.status === "found" && result.game ? (
+        <div className="mt-3 space-y-2">
+          <h2 className="text-lg font-semibold tracking-tight">
+            {result.game.name}
+          </h2>
+          {result.game.slug ? (
+            <Link
+              className="text-sm text-blue-700 underline-offset-4 hover:underline dark:text-blue-300"
+              href={`/game/${result.game.slug}`}
+            >
+              Open game page
+            </Link>
+          ) : null}
+        </div>
+      ) : (
+        <p className="mt-3 text-sm text-neutral-700 dark:text-neutral-300">
+          {result.message}
+        </p>
+      )}
+    </article>
+  );
+}
+
 export default async function ComparePage(props: {
   searchParams?: Promise<CompareSearchParams>;
 }) {
@@ -53,13 +85,33 @@ export default async function ComparePage(props: {
     normalizeCompareQuery(searchParams?.gameB);
 
   try {
-    const [leftGame, rightGame] =
+    const [leftResult, rightResult] =
       leftQuery && rightQuery
         ? [
-            await resolveGameReference(leftQuery),
-            await resolveGameReference(rightQuery),
+            await resolveGameReferenceResult(leftQuery),
+            await resolveGameReferenceResult(rightQuery),
           ]
-        : [null, null];
+        : [
+            {
+              query: leftQuery,
+              status: "not_found" as const,
+              game: null,
+              message: "Enter a game title, slug, or IGDB id.",
+            },
+            {
+              query: rightQuery,
+              status: "not_found" as const,
+              game: null,
+              message: "Enter a game title, slug, or IGDB id.",
+            },
+          ];
+
+    const leftGame = leftResult.game;
+    const rightGame = rightResult.game;
+    const bothResolved =
+      leftResult.status === "found" && rightResult.status === "found";
+    const hasScopedLookupIssue =
+      leftResult.status !== "found" || rightResult.status !== "found";
 
     return (
       <section className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
@@ -119,14 +171,21 @@ export default async function ComparePage(props: {
             Enter two game titles, slugs, or IGDB ids to compare them side by
             side.
           </div>
-        ) : !leftGame || !rightGame ? (
-          <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-6 text-sm text-neutral-700 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300">
-            {leftGame || rightGame
-              ? "One of the games could not be resolved from IGDB. Try a more exact title or slug."
-              : "Neither game could be resolved from IGDB. Try more exact titles."}
-          </div>
-        ) : (
+        ) : bothResolved && leftGame && rightGame ? (
           <GameCompareTable leftGame={leftGame} rightGame={rightGame} />
+        ) : (
+          <div className="space-y-4">
+            {hasScopedLookupIssue ? (
+              <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4 text-sm text-neutral-700 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300">
+                Compare stayed available, but one or both lookups did not fully
+                resolve.
+              </div>
+            ) : null}
+            <div className="grid gap-4 md:grid-cols-2">
+              <LookupStateCard result={leftResult} title="Game A" />
+              <LookupStateCard result={rightResult} title="Game B" />
+            </div>
+          </div>
         )}
       </section>
     );
@@ -134,12 +193,6 @@ export default async function ComparePage(props: {
     if (isIgdbConfigError(error)) {
       return (
         <ErrorState message="IGDB credentials are not configured on the server." />
-      );
-    }
-
-    if (isIgdbUpstreamError(error)) {
-      return (
-        <ErrorState message="IGDB is temporarily unavailable for comparisons." />
       );
     }
 

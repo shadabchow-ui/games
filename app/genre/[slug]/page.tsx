@@ -29,7 +29,9 @@ function ErrorState({ title, message }: { title: string; message: string }) {
   return (
     <section className="mx-auto max-w-(--breakpoint-2xl) px-4 pb-10 pt-4">
       <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
-      <p className="pt-2 text-sm text-neutral-600 dark:text-neutral-300">{message}</p>
+      <p className="pt-2 text-sm text-neutral-600 dark:text-neutral-300">
+        {message}
+      </p>
     </section>
   );
 }
@@ -56,7 +58,9 @@ export default async function GenreDetailPage({
     return (
       <section className="mx-auto max-w-(--breakpoint-2xl) space-y-10 px-4 pb-10 pt-4">
         <header className="space-y-2">
-          <h1 className="text-3xl font-semibold tracking-tight">{genre.name}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {genre.name}
+          </h1>
           <p className="text-sm text-neutral-600 dark:text-neutral-300">
             Games currently cataloged for this genre.
           </p>
@@ -71,7 +75,9 @@ export default async function GenreDetailPage({
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold tracking-tight">Recently released</h2>
+          <h2 className="text-xl font-semibold tracking-tight">
+            Recently released
+          </h2>
           <GameGrid
             emptyMessage="No recent releases are available for this genre."
             games={recentGames.map(mapIgdbGameToCard)}

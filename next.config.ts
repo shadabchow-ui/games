@@ -1,4 +1,5 @@
 export default {
+  devIndicators: false,
   experimental: {
     ppr: true,
     inlineCss: true,

@@ -4,6 +4,7 @@ import type {
   CachedTwitchToken,
   DirectoryItem,
   GameCardData,
+  GameLookupResult,
   GameSortMode,
   IgdbApiErrorResponse,
   IgdbCompany,
@@ -769,6 +770,41 @@ limit ${Math.min(Math.max(limit, 1), 50)};
   ]);
 }
 
+function normalizeLookupText(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/['".:,!?]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function buildGameLookupFieldsQuery(whereClause: string) {
+  return `
+fields
+  id,
+  name,
+  slug,
+  summary,
+  first_release_date,
+  total_rating,
+  total_rating_count,
+  rating,
+  cover.image_id,
+  genres.id,
+  genres.name,
+  platforms.id,
+  platforms.name,
+  themes.id,
+  themes.name,
+  game_modes.id,
+  game_modes.name,
+  involved_companies.company.name,
+  involved_companies.company.slug;
+where ${whereClause};
+limit 1;
+`;
+}
+
 export async function resolveGameReference(
   query: string,
 ): Promise<IgdbGame | null> {
@@ -826,9 +862,137 @@ limit 1;
   return (
     results.find((game) => game.name.toLowerCase() === normalized) ??
     results.find((game) => game.slug?.toLowerCase() === normalized) ??
+    results.find(
+      (game) =>
+        normalizeLookupText(game.name) === normalizeLookupText(safeQuery),
+    ) ??
     results[0] ??
     null
   );
+}
+
+export async function resolveGameReferenceResult(
+  query: string,
+): Promise<GameLookupResult> {
+  const safeQuery = sanitizeText(query);
+  if (!safeQuery) {
+    return {
+      query: "",
+      status: "not_found",
+      game: null,
+      message: "Enter a game title, slug, or IGDB id.",
+    };
+  }
+
+  try {
+    if (/^\d+$/.test(safeQuery)) {
+      const byId = await igdbPost<IgdbGame>({
+        endpoint: "games",
+        query: buildGameLookupFieldsQuery(`id = ${safeQuery}`),
+      });
+
+      return {
+        query: safeQuery,
+        status: byId[0] ? "found" : "not_found",
+        game: byId[0] ?? null,
+        message: byId[0]
+          ? undefined
+          : `No game was found for IGDB id ${safeQuery}.`,
+      };
+    }
+
+    const looksLikeSlug = /^[a-z0-9-]+$/.test(safeQuery);
+    if (looksLikeSlug) {
+      const bySlug = await getGameBySlug(safeQuery.toLowerCase());
+      if (bySlug) {
+        return {
+          query: safeQuery,
+          status: "found",
+          game: bySlug,
+        };
+      }
+    }
+
+    const exactTitleMatches = await igdbPost<IgdbGame>({
+      endpoint: "games",
+      query: `
+fields
+  id,
+  name,
+  slug,
+  summary,
+  first_release_date,
+  total_rating,
+  total_rating_count,
+  rating,
+  cover.image_id,
+  genres.id,
+  genres.name,
+  platforms.id,
+  platforms.name,
+  themes.id,
+  themes.name,
+  game_modes.id,
+  game_modes.name,
+  involved_companies.company.name,
+  involved_companies.company.slug;
+search "${escapeIgdbString(safeQuery)}";
+where name != null;
+sort total_rating_count desc;
+limit 8;
+`,
+    });
+
+    const normalizedQuery = normalizeLookupText(safeQuery);
+    const exactTitleMatch =
+      exactTitleMatches.find(
+        (game) => normalizeLookupText(game.name) === normalizedQuery,
+      ) ??
+      exactTitleMatches.find(
+        (game) => game.slug?.toLowerCase() === safeQuery.toLowerCase(),
+      ) ??
+      null;
+
+    if (exactTitleMatch) {
+      return {
+        query: safeQuery,
+        status: "found",
+        game: exactTitleMatch,
+      };
+    }
+
+    const broadMatches = await searchGames(safeQuery, 8);
+    if (broadMatches.length > 0) {
+      return {
+        query: safeQuery,
+        status: "found",
+        game:
+          broadMatches.find(
+            (game) => normalizeLookupText(game.name) === normalizedQuery,
+          ) ??
+          broadMatches[0] ??
+          null,
+      };
+    }
+
+    return {
+      query: safeQuery,
+      status: "not_found",
+      game: null,
+      message: `No game was found for "${safeQuery}".`,
+    };
+  } catch (error) {
+    if (isIgdbUpstreamError(error)) {
+      return {
+        query: safeQuery,
+        status: "upstream_error",
+        game: null,
+        message: "IGDB is temporarily unavailable for this lookup.",
+      };
+    }
+
+    throw error;
+  }
 }
 
 async function getModeIds(
