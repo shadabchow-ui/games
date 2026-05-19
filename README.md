@@ -1,75 +1,394 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fcommerce&project-name=commerce&repo-name=commerce&demo-title=Next.js%20Commerce&demo-url=https%3A%2F%2Fdemo.vercel.store&demo-image=https%3A%2F%2Fbigcommerce-demo-asset-ksvtgfvnd.vercel.app%2Fbigcommerce.png&env=COMPANY_NAME,SHOPIFY_REVALIDATION_SECRET,SHOPIFY_STORE_DOMAIN,SHOPIFY_STOREFRONT_ACCESS_TOKEN,SITE_NAME)
+# Upcube Games
 
-# Next.js Commerce
+Upcube Games is a Next.js game discovery directory powered by live IGDB data.
 
-A high-performance, server-rendered Next.js App Router ecommerce application.
+The project turns a stock commerce template into a game-focused catalog experience for browsing top games, new releases, upcoming launches, platforms, genres, franchises, and game companies. It is built with the Next.js App Router, React 19, TypeScript, Tailwind, and Cloudflare deployment tooling through OpenNext.
 
-This template uses React Server Components, Server Actions, `Suspense`, `useOptimistic`, and more.
+## Current status
 
-<h3 id="v1-note"></h3>
+This repository is an active game directory and discovery platform foundation.
 
-> Note: Looking for Next.js Commerce v1? View the [code](https://github.com/vercel/commerce/tree/v1), [demo](https://commerce-v1.vercel.store), and [release notes](https://github.com/vercel/commerce/releases/tag/v1).
+The app already includes a live IGDB integration layer, homepage discovery sections, game cards, search behavior, directory data utilities, companies, platforms, genres, franchises, rule-based recommendations, and Cloudflare-oriented deploy/preview scripts.
 
-## Providers
+The honest current posture is:
 
-Vercel will only be actively maintaining a Shopify version [as outlined in our vision and strategy for Next.js Commerce](https://github.com/vercel/commerce/pull/966).
+```text
+Game discovery directory foundation + live IGDB integration + Cloudflare deployment direction.
+```
 
-Vercel is happy to partner and work with any commerce provider to help them get a similar template up and running and listed below. Alternative providers should be able to fork this repository and swap out the `lib/shopify` file with their own implementation while leaving the rest of the template mostly unchanged.
+It should not yet be described as a finished gaming marketplace, full review platform, social network, storefront, or AI recommendation engine. User accounts, ratings, advanced personalization, owned libraries, comments, wishlists, and production-scale catalog operations are future or partial areas unless validated in code.
 
-- Shopify (this repository)
-- [BigCommerce](https://github.com/bigcommerce/nextjs-commerce) ([Demo](https://next-commerce-v2.vercel.app/))
-- [Ecwid by Lightspeed](https://github.com/Ecwid/ecwid-nextjs-commerce/) ([Demo](https://ecwid-nextjs-commerce.vercel.app/))
-- [Geins](https://github.com/geins-io/vercel-nextjs-commerce) ([Demo](https://geins-nextjs-commerce-starter.vercel.app/))
-- [Medusa](https://github.com/medusajs/vercel-commerce) ([Demo](https://medusa-nextjs-commerce.vercel.app/))
-- [Prodigy Commerce](https://github.com/prodigycommerce/nextjs-commerce) ([Demo](https://prodigy-nextjs-commerce.vercel.app/))
-- [Saleor](https://github.com/saleor/nextjs-commerce) ([Demo](https://saleor-commerce.vercel.app/))
-- [Shopware](https://github.com/shopwareLabs/vercel-commerce) ([Demo](https://shopware-vercel-commerce-react.vercel.app/))
-- [Swell](https://github.com/swellstores/verswell-commerce) ([Demo](https://verswell-commerce.vercel.app/))
-- [Umbraco](https://github.com/umbraco/Umbraco.VercelCommerce.Demo) ([Demo](https://vercel-commerce-demo.umbraco.com/))
-- [Wix](https://github.com/wix/headless-templates/tree/main/nextjs/commerce) ([Demo](https://wix-nextjs-commerce.vercel.app/))
-- [Fourthwall](https://github.com/FourthwallHQ/vercel-commerce) ([Demo](https://vercel-storefront.fourthwall.app/))
+## What Upcube Games is building
 
-> Note: Providers, if you are looking to use similar products for your demo, you can [download these assets](https://drive.google.com/file/d/1q_bKerjrwZgHwCw0ovfUMW6He9VtepO_/view?usp=sharing).
+Upcube Games is aimed at becoming a useful game discovery website where users can:
 
-## Integrations
+- Search for video games.
+- Browse top-rated games.
+- Browse new releases.
+- Browse upcoming launches.
+- Explore games by platform.
+- Explore games by genre.
+- Browse featured companies/studios.
+- Explore franchises.
+- View game details from IGDB metadata.
+- Compare and discover games through rule-based recommendations.
+- Use a clean, fast, server-rendered directory experience.
 
-Integrations enable upgraded or additional functionality for Next.js Commerce
+## Core principles
 
-- [Orama](https://github.com/oramasearch/nextjs-commerce) ([Demo](https://vercel-commerce.oramasearch.com/))
+### Discovery first
 
-  - Upgrades search to include typeahead with dynamic re-rendering, vector-based similarity search, and JS-based configuration.
-  - Search runs entirely in the browser for smaller catalogs or on a CDN for larger.
+The primary product goal is helping users find what to play next. Search, top games, new releases, upcoming games, genres, platforms, companies, and franchises matter more than checkout-style ecommerce flows.
 
-- [React Bricks](https://github.com/ReactBricks/nextjs-commerce-rb) ([Demo](https://nextjs-commerce.reactbricks.com/))
-  - Edit pages, product details, and footer content visually using [React Bricks](https://www.reactbricks.com) visual headless CMS.
+### Live data, graceful fallback
 
-## Running locally
+The app is designed to use live IGDB data when Twitch/IGDB credentials are configured. When credentials are missing or upstream data is unavailable, the UI should fail gracefully with clear setup/fallback messages.
 
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js Commerce. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables) for this, but a `.env` file is all that is necessary.
+### Server-side data access
 
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control your Shopify store.
+IGDB access is handled server-side through environment variables and server-only modules. Client-facing UI should not expose Twitch/IGDB secrets.
 
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
+### Useful without paid AI
+
+The app includes rule-based recommendation and comparison direction so the directory can remain useful without relying on paid AI providers.
+
+### Cloudflare-ready deployment
+
+The project includes OpenNext Cloudflare scripts for build, preview, and deploy workflows.
+
+## Repository identity
+
+```text
+Repository: shadabchow-ui/games
+Project:    Upcube Games Directory
+Framework:  Next.js App Router
+Runtime:    React 19 + TypeScript
+Deploy:     OpenNext for Cloudflare / Wrangler
+```
+
+## Technology stack
+
+- Next.js 15 canary
+- React 19
+- TypeScript
+- Tailwind CSS 4 tooling
+- Headless UI
+- Heroicons
+- Geist font package
+- Sonner
+- OpenNext for Cloudflare
+- Wrangler
+- IGDB API
+- Twitch OAuth client credentials flow
+
+## Major feature areas
+
+### Homepage discovery
+
+The homepage presents a game discovery shell with sections for:
+
+- Top games.
+- New releases.
+- Upcoming games.
+- Popular platforms.
+- Browse by genre.
+- Featured companies.
+
+When IGDB credentials are not configured, the homepage renders a clear message explaining the needed server-side environment variables.
+
+### IGDB integration
+
+The IGDB client layer supports:
+
+- Twitch token authentication.
+- Token caching.
+- Server-only IGDB API requests.
+- Config error handling.
+- Upstream error handling.
+- Game search.
+- Game lookup by slug, title, or IGDB ID.
+- Top-rated games.
+- Recent games.
+- Upcoming games.
+- Games directory queries.
+- Genres.
+- Platforms.
+- Companies.
+- Franchises.
+- Rule-based recommendations.
+
+### Search
+
+Search supports user-entered game queries and resolves results from IGDB data. The integration sanitizes query text and limits query length to protect upstream calls.
+
+### Games directory
+
+The directory layer supports multiple sort modes and limits. It can fetch top-rated, newest, upcoming, and name-sorted game lists with fallback query strategies to reduce empty result states.
+
+### Platforms and genres
+
+The app includes platform and genre directory support, with preferred ordering for common platforms and genres.
+
+Examples include:
+
+- PC.
+- PlayStation.
+- Xbox.
+- Nintendo Switch.
+- Steam Deck.
+- iOS.
+- Android.
+- RPG.
+- Shooter.
+- Adventure.
+- Indie.
+- Strategy.
+- Racing.
+- Sport.
+- Fighting.
+- Puzzle.
+
+### Companies and studios
+
+The app includes support for featured companies, company pages, developed games, and published games.
+
+### Franchises
+
+The app includes franchise directory and franchise game lookup support.
+
+### Game detail direction
+
+Game detail routes can use IGDB slugs to retrieve metadata such as title, summary, release date, rating, cover image, genres, platforms, themes, game modes, involved companies, and similar games.
+
+### Rule-based recommendations
+
+The project includes a non-AI recommendation direction based on game metadata and lookup utilities. This keeps recommendations lightweight and useful without requiring an external LLM provider.
+
+## Environment configuration
+
+To load live IGDB data, configure Twitch/IGDB credentials on the server.
+
+Supported variables include:
+
+```bash
+IGDB_BASE_URL=https://api.igdb.com/v4
+IGDB_CLIENT_ID=
+IGDB_ACCESS_TOKEN=
+TWITCH_CLIENT_ID=
+TWITCH_ACCESS_TOKEN=
+TWITCH_CLIENT_SECRET=
+```
+
+Credential options:
+
+- `IGDB_CLIENT_ID` or `TWITCH_CLIENT_ID` is required as the client ID.
+- Use `IGDB_ACCESS_TOKEN` or `TWITCH_ACCESS_TOKEN` if you already have a token.
+- Or set `TWITCH_CLIENT_SECRET` so the app can request and cache a token through Twitch OAuth client credentials.
+
+Do not commit real credentials to the repository.
+
+## Development
+
+### Prerequisites
+
+- Node.js compatible with the project dependencies
+- pnpm
+- Twitch/IGDB API credentials for live data
+
+### Install
 
 ```bash
 pnpm install
+```
+
+### Run locally
+
+```bash
 pnpm dev
 ```
 
-Your app should now be running on [localhost:3000](http://localhost:3000/).
+The app should run locally at:
 
-<details>
-  <summary>Expand if you work at Vercel and want to run locally and / or contribute</summary>
+```text
+http://localhost:3000
+```
 
-1. Run `vc link`.
-1. Select the `Vercel Solutions` scope.
-1. Connect to the existing `commerce-shopify` project.
-1. Run `vc env pull` to get environment variables.
-1. Run `pnpm dev` to ensure everything is working correctly.
-</details>
+### Build
 
-## Vercel, Next.js Commerce, and Shopify Integration Guide
+```bash
+pnpm build
+```
 
-You can use this comprehensive [integration guide](https://vercel.com/docs/integrations/ecommerce/shopify) with step-by-step instructions on how to configure Shopify as a headless CMS using Next.js Commerce as your headless Shopify storefront on Vercel.
+### Start production server locally
+
+```bash
+pnpm start
+```
+
+### Format
+
+```bash
+pnpm prettier
+```
+
+### Check formatting
+
+```bash
+pnpm prettier:check
+```
+
+### Test
+
+```bash
+pnpm test
+```
+
+`pnpm test` currently runs the Prettier check.
+
+## Cloudflare deployment
+
+The project includes Cloudflare deployment scripts using OpenNext:
+
+```bash
+pnpm preview
+pnpm deploy
+```
+
+These run:
+
+```bash
+opennextjs-cloudflare build && opennextjs-cloudflare preview
+opennextjs-cloudflare build && opennextjs-cloudflare deploy
+```
+
+Make sure Cloudflare/Wrangler configuration and environment variables are set before deploying.
+
+## Available scripts
+
+| Script | Purpose |
+|---|---|
+| `pnpm dev` | Start Next.js development server with Turbopack |
+| `pnpm build` | Build the Next.js app |
+| `pnpm start` | Start the Next.js production server |
+| `pnpm prettier` | Format files with Prettier |
+| `pnpm prettier:check` | Check formatting |
+| `pnpm test` | Run formatting check |
+| `pnpm preview` | Build and preview through OpenNext Cloudflare |
+| `pnpm deploy` | Build and deploy through OpenNext Cloudflare |
+
+## Validation checklist
+
+Before claiming a change is complete, run:
+
+```bash
+pnpm prettier:check
+pnpm build
+```
+
+For data and route changes, manually verify:
+
+- Homepage loads.
+- Missing IGDB credentials show a clear fallback message.
+- Top games render when credentials are configured.
+- New releases render when credentials are configured.
+- Upcoming games render when credentials are configured.
+- Platform pages load.
+- Genre pages load.
+- Company pages load and do not 404 for valid company slugs.
+- Franchise pages load where available.
+- Search returns useful results.
+- Game detail pages load for valid slugs.
+- Game cover images are sharp enough for card and detail usage.
+- Pagination or load-more behavior is clear where limits apply.
+- Cloudflare preview/deploy scripts still work when configured.
+
+## Maturity map
+
+| Area | Status | Notes |
+|---|---|---|
+| Next.js app shell | Implemented foundation | App Router, React 19, TypeScript |
+| Homepage game discovery | Implemented foundation | Top/new/upcoming/platform/genre/company sections |
+| IGDB integration | Implemented foundation | Server-only client, token handling, query helpers |
+| Search | Implemented foundation | Query sanitization and IGDB search support |
+| Games directory | Implemented foundation | Sort modes and fallback queries |
+| Platforms/genres | Implemented foundation | Directory tile support |
+| Companies/studios | Implemented foundation | Featured companies, developed/published games support |
+| Franchises | Implemented foundation | Franchise directory and game lookup support |
+| Rule-based recommendations | Foundation | Useful without paid AI providers |
+| User accounts | Future | Not a current core claim |
+| Reviews/ratings by users | Future | IGDB ratings exist; local user reviews are not a current core claim |
+| Commerce/checkout | Not core | Stock commerce README has been removed; this is a games directory |
+| Production catalog ops | Partial/future | Needs caching, monitoring, image QA, pagination, and rate-limit hardening |
+
+## Roadmap
+
+### Near term
+
+- Improve game detail pages.
+- Fix any remaining 404s on game/company/platform/genre routes.
+- Add clearer pagination or load-more behavior.
+- Improve cover image quality and responsive image handling.
+- Improve empty/error/loading states.
+- Add better route metadata for SEO.
+- Harden Cloudflare deployment configuration.
+
+### Mid term
+
+- Add richer game comparison pages.
+- Expand rule-based recommendations.
+- Add franchise and studio browsing polish.
+- Add saved games or wishlist behavior.
+- Add better caching and rate-limit protection for IGDB calls.
+- Add structured sitemap generation for indexed game pages.
+
+### Longer term
+
+- Add user accounts.
+- Add personal game libraries/backlogs.
+- Add reviews, ratings, and community lists.
+- Add AI-assisted discovery if useful and cost-controlled.
+- Add admin/catalog health tooling.
+- Add provider abstraction for non-IGDB data sources.
+
+## Data and provider boundaries
+
+Upcube Games uses IGDB/Twitch data when configured. The app should respect provider terms, rate limits, attribution requirements, and API credential security.
+
+The app should not:
+
+- Expose Twitch/IGDB secrets to the browser.
+- Scrape or rehost assets outside provider terms.
+- Claim ownership of third-party metadata.
+- Present unavailable upstream data as verified.
+
+## What this repo is not
+
+Upcube Games is not a finished game marketplace, Steam clone, social network, or review platform.
+
+It is best understood as a live game discovery and directory foundation in active development.
+
+## Good short description
+
+Use this when describing the project publicly:
+
+> A Next.js game discovery directory powered by IGDB, with top games, new releases, upcoming games, platforms, genres, companies, franchises, search, and rule-based recommendation foundations.
+
+## Contributing and development notes
+
+When working on this repo:
+
+- Keep IGDB credentials server-side only.
+- Keep missing-credential states graceful.
+- Avoid restoring stock ecommerce/Shopify README language.
+- Validate route links so cards do not lead to 404 pages.
+- Prefer sharp cover/image URLs for cards and detail pages.
+- Add pagination or clear limits where large directories are shown.
+- Run formatting and build checks before claiming completion.
+
+## License
+
+License information has not been finalized yet.
+
+## Disclaimer
+
+Upcube Games is an independent game discovery project in active development. It is not affiliated with IGDB, Twitch, Steam, Nintendo, Sony, Microsoft, or any game publisher/platform holder. Use of third-party metadata, images, and APIs must follow each provider's terms, attribution rules, rate limits, and branding requirements.
